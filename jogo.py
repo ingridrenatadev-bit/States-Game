@@ -6,7 +6,7 @@ estados: Dict[str, str] = {
     "Minas Gerais" : "Belo Horizonte",
 }
 
-def jogar_partida() -> tuple[int, int, bool]:
+def jogar_partida() -> None:
 
     print("\n--- Vamos começar o jogo! ---")
     lista_estados = list(estados.keys())
@@ -15,11 +15,12 @@ def jogar_partida() -> tuple[int, int, bool]:
 
     while len(lista_estados) > 0:
         estado = lista_estados.pop(0)
+    
         option_user = input(f"Qual é a capital do estado {estado}? (ou digite 'sair'):")
         
         if option_user.strip().lower() == 'sair':
             print("Você escolheu sair do jogo.")
-            break
+            break  # Sai deste loop de perguntas
 
         tentativas += 1
     
@@ -33,17 +34,6 @@ def jogar_partida() -> tuple[int, int, bool]:
             lista_estados.append(estado)
             continue
 
-    if tentativas > 0:
-        porcentagem = (acertos / tentativas) * 100
-        print(f"\n--- FIM DE JOGO ---")
-        print(f"Acertos: {acertos} | Tentativas: {tentativas}")
-        print(f"Aproveitamento: {porcentagem:.2f}%")
-    else:
-        print("\nNenhuma pergunta respondida.")
-
-    completou_jogo = len(lista_estados) == 0
-    return tentativas, acertos
-
 def percorrer_estados() -> None:#Não esqueça de criar um feature que só permite o usuário acessar a função percorrer_estados() após o término do jogo, ou seja, quando o usuário acertar todas as capitais.
     for estado, capital in estados.items():
         print(f"Parabéns!\n{estado} -> {capital}") 
@@ -54,6 +44,14 @@ def buscar_estado(estado: str) -> str:
 
     return estados.get(estado_nome, "Estado não encontrado")
 
+def relatorio_final(tentativas: int, acertos: int) -> None:
+    if tentativas > 0:
+        porcentagem = (acertos / tentativas) * 100
+        print(f"\n--- FIM DE JOGO ---")
+        print(f"Acertos: {acertos} | Tentativas: {tentativas}")
+        print(f"Aproveitamento: {porcentagem:.2f}%")
+    else:
+        print("\nNenhuma pergunta respondida.")
 
 def main():
     lista_estados = list(estados.keys())
@@ -73,7 +71,10 @@ def main():
 
         elif opcao == "2":
             percorrer_estados()
+
         elif opcao == "3":
+            relatorio_final(tentativas=0, acertos=0)  
+        elif opcao == "4":
             print("Saindo do jogo. Até a próxima!")
             break
         else:
