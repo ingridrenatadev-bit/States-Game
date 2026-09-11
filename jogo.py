@@ -6,7 +6,35 @@ estados: Dict[str, str] = {
     "Minas Gerais" : "Belo Horizonte",
 }
 
-def percorrer_estados() -> None:#Não esqueça de criar um feature que só permite o usuário acessar a função percorrer_estados() após o término do jogo.
+def jogar_partida() -> None:
+
+    print("\n--- Vamos começar o jogo! ---")
+    lista_estados = list(estados.keys())
+    tentativas = 0
+    acertos = 0
+
+    while len(lista_estados) > 0:
+        estado = lista_estados.pop(0)
+    
+        option_user = input(f"Qual é a capital do estado {estado}? (ou digite 'sair'):")
+        
+        if option_user.strip().lower() == 'sair':
+            print("Você escolheu sair do jogo.")
+            break  # Sai deste loop de perguntas
+
+        tentativas += 1
+    
+        if option_user.strip().lower() == estados[estado].lower():
+            acertos += 1
+            print(f"Parabéns! Você acertou! A capital de {estado} é {estados[estado]}.")
+            continue
+
+        else:
+            print("Tente novamente: ")
+            lista_estados.append(estado)
+            continue
+
+def percorrer_estados() -> None:#Não esqueça de criar um feature que só permite o usuário acessar a função percorrer_estados() após o término do jogo, ou seja, quando o usuário acertar todas as capitais.
     for estado, capital in estados.items():
         print(f"Parabéns!\n{estado} -> {capital}") 
 
@@ -16,38 +44,43 @@ def buscar_estado(estado: str) -> str:
 
     return estados.get(estado_nome, "Estado não encontrado")
 
+def relatorio_final(tentativas: int, acertos: int) -> None:
+    if tentativas > 0:
+        porcentagem = (acertos / tentativas) * 100
+        print(f"\n--- FIM DE JOGO ---")
+        print(f"Acertos: {acertos} | Tentativas: {tentativas}")
+        print(f"Aproveitamento: {porcentagem:.2f}%")
+    else:
+        print("\nNenhuma pergunta respondida.")
+
 def main():
     lista_estados = list(estados.keys())
     print("Seja bem-vindo ao jogo de adivinhação de capitais!")
-    while(True):
-    
-        opcao_user = input("Digite uma das opções para continuar: \n1 - Jogar\n2 - Sair\n3 - Listar estados e capitais\nSua opção: ")
 
-        try:
-            opcao_user = int(opcao_user)
-        except ValueError:
-            print("Opção inválida. Por favor, digite um número válido.\n")
-            continue
+    while True:
 
-        if opcao_user == "1":
+        print("\n=== JOGO DOS ESTADOS ===")
+        print("1 - Jogar")
+        print("2 - Listar Estados e Capitais")
+        print("3 - Sair")
+        
+        opcao = input("Sua opção: ").strip()
 
-            #verificar a quantide de tentativas e acertos do usuário
-            
-            print("Vamos começar o jogo!")
-            while len(lista_estados) > 0:
-                tentivas += 1
-                estado = lista_estados.pop(0)
+        if opcao == "1":
+            jogar_partida()
 
-                option_user = input(f"Qual é a capital do estado {estado}? ")
+        elif opcao == "2":
+            percorrer_estados()
 
-                if option_user.strip().lower() == estados[estado].lower():
-                    acertos += 1
-                    print(f"Parabéns! Você acertou! A capital de {estado} é {estados[estado]}.")
-                    continue
-                else:
-                    print("Tente novamente: ")
-                    lista_estados.append(estado)
-                    continue
+        elif opcao == "3":
+            relatorio_final(tentativas=0, acertos=0)  
+        elif opcao == "4":
+            print("Saindo do jogo. Até a próxima!")
+            break
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+        
+
 
 if __name__ == "__main__":
     main()
